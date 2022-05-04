@@ -6,6 +6,7 @@ const path = require("path")
 // server라는 변수에 http를 통해 동작한 app을 실행시키는 로직
 const server = http.createServer(app)
 const socketIO = require("socket.io")
+const moment = require("moment")
 
 const io = socketIO(server);
 
@@ -21,7 +22,12 @@ const PORT = process.env.RORT || 5000;
 // 소켓 연결
 io.on("connection", (socket) => {
     socket.on("chatting", (data) => {
-        io.emit("chatting", data)
+        const { name, msg} = data;
+        io.emit("chatting", {
+            name,
+            msg,
+            time: moment(new Date()).format("h:ss A")
+        })
     })
 })
 
